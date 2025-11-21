@@ -5,11 +5,12 @@ interface Augment {
   description: string;
 }
 
-export class CustomCommand<T> {
+export class Command<T> {
   private name: string;
   private description: string;
   private args: Array<Augment>;
   static commanndList: Map<string, string> = new Map();
+  static commandsInstanceList: Map<string, Command<any>> = new Map();
 
   constructor(name: string, args: Array<Augment> = [], description: string = '') {
     this.name = name;
@@ -24,7 +25,8 @@ export class CustomCommand<T> {
     }
     this.description = desc;
     // register command
-    CustomCommand.commanndList.set(name, desc);
+    Command.commanndList.set(name, desc);
+    Command.commandsInstanceList.set(name, this);
   }
 
   getName(): string {
@@ -42,38 +44,31 @@ export class CustomCommand<T> {
   // get all registered commands' names and descriptions.
   public static getAllCommands(): Array<{ command: string; description: string }> {
     const commands: Array<{ command: string; description: string }> = [];
-    CustomCommand.commanndList.forEach((command, description) => {
+    Command.commanndList.forEach((command, description) => {
       commands.push({ command, description });
     });
     return commands;
   }
 
+  public static getCommandInstance(commandName: string): Command<any> | undefined {
+    return Command.commandsInstanceList.get(commandName);
+  }
+
   // Need overwrite
-  execute(...args: Array<any>): void {
+  execute(...args: Array<any>): string | void {
     console.log(`Executing command: ${this.name} with args: ${args}`);
   }
 }
 
-export class FooCommand extends CustomCommand<string> {
+// Example command
+export class FooCommand extends Command<string> {
   constructor() {
     super('foo', [], 'This is a foo command example.');
   }
 
-  execute(): void {
-    console.log(`${this.getArgs()[0]} command executed with args: ${this.getArgs()}`);
-  }
-}
-
-export class BarkCommand extends CustomCommand<string> {
-  constructor() {
-    super(
-      'bark',
-      [{ name: 'name', type: 'string', description: 'The name of the barker' }],
-      'This command makes a character bark.',
-    );
-  }
-
-  execute(name: string): void {
-    console.log(`${name} has barked!`);
+  execute(): string {
+    const result = `${this.getArgs()[0]} command executed with args: ${this.getArgs()}`;
+    console.log(result);
+    return result;
   }
 }
