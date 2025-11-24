@@ -1,4 +1,4 @@
-# MyFlow
+# MyAgent
 
 What I know about ai agents and workflows.
 
@@ -30,8 +30,8 @@ npm install
 
 ## Project Structure
 
-```
-myflow/
+```zsh
+myAgent/
 ├── src/           # TypeScript source files
 ├── dist/          # Compiled JavaScript files
 ├── node_modules/  # Dependencies
