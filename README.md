@@ -1,6 +1,6 @@
-# MyFlow - TypeScript Project
+# MyFlow
 
-A basic TypeScript project with Prettier and ESLint configuration.
+What I know about ai agents and workflows.
 
 ## Setup
 
